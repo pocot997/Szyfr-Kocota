@@ -40,12 +40,23 @@ String^ Algorithm::file_read(System::Object^ sender, System::EventArgs^ e, int t
     return nullptr;
 }
 
-String^ Algorithm::convert_to_system_string(int* tab, int tab_length)
+String^ Algorithm::convert_to_system_string_from_int(int* tab, int tab_length)
 {
     string tmp ="";
     for (int i = 0; i < tab_length; i++)
     {
         tmp += to_string(tab[i]);
+    }
+    String^ full = gcnew String(tmp.c_str());
+    return full;
+}
+
+String^ Algorithm::convert_to_system_string_from_char(char* tab, int tab_length)
+{
+    string tmp = "";
+    for (int i = 0; i < tab_length; i++)
+    {
+        tmp.push_back(tab[i]);
     }
     String^ full = gcnew String(tmp.c_str());
     return full;
@@ -166,6 +177,10 @@ void Algorithm::shuffle_alphabet()
             shuffled_alphabet[i][j] = alphabet[key_y[i] - 1][key_x[j] - 1];
         }
     }
+    if (encrypting)
+        solution_text_int = new int[loaded_length];
+    else
+        solution_text_char = new char[loaded_length / 2];
 }
 
 int Algorithm::find_char(char c)
@@ -178,7 +193,6 @@ int Algorithm::find_char(char c)
             {
                 return (i + 1) * 10 + (j + 1);
             }
-                
         }
     }
     return -1 * c;
@@ -187,7 +201,28 @@ int Algorithm::find_char(char c)
 void Algorithm::encrypt(int index)
 {
     char tmp = loaded_text[index];
-    solution_text[index] = find_char(tmp);
+    solution_text_int[index] = find_char(tmp);
+}
+
+void Algorithm::decrypt(int index, int where_decode)
+{
+    int y = (loaded_text[index]-'0');
+    int x = (loaded_text[index+1]-'0');
+    solution_text_char[where_decode] = shuffled_alphabet[y-1][x-1];
+}
+
+void Algorithm::decrypt_negative(int index, int where_decode)
+{
+    int y = (loaded_text[index + 1] - '0');
+    int x = (loaded_text[index + 2] - '0');
+    solution_text_char[where_decode] = (y * 10) + x;
+}
+
+void Algorithm::delete_additional(int where_decode)
+{
+    int how_many_allocated = loaded_length / 2;
+    for (int i = where_decode; i < how_many_allocated; i++)
+        solution_text_char[i] = '\0';
 }
 
 int Algorithm::get_loaded_length()
@@ -197,12 +232,17 @@ int Algorithm::get_loaded_length()
 
 int Algorithm::get_solution_int(int i)
 {
-    return solution_text[i];
+    return solution_text_int[i];
 }
 
-int* Algorithm::get_solution_text()
+int* Algorithm::get_solution_text_int()
 {
-    return solution_text;
+    return solution_text_int;
+}
+
+char* Algorithm::get_solution_text_char()
+{
+    return solution_text_char;
 }
 
 char Algorithm::get_loaded_char(int i)
@@ -228,7 +268,17 @@ void Algorithm::delete_everything()
     delete[] key_y;
     delete[] loaded_text;
     delete[] key_text;
-    delete[] solution_text;
+    delete[] solution_text_int;
+}
+
+void Algorithm::set_encrypting(bool set)
+{
+    encrypting = set;
+}
+
+bool Algorithm::get_encrypting()
+{
+	return encrypting;
 }
 
 Algorithm::Algorithm()
@@ -244,7 +294,8 @@ Algorithm::Algorithm()
     key_y = new int[7];
     loaded_text = nullptr;
     key_text = nullptr;
-    solution_text = nullptr;
+    solution_text_int = nullptr;
+    solution_text_char = nullptr;
 }
 
 void Algorithm::fill_loaded_text(string tmp)
@@ -252,9 +303,6 @@ void Algorithm::fill_loaded_text(string tmp)
     loaded_length = tmp.length();
     loaded_text = new char[loaded_length+1];
     strcpy(loaded_text, tmp.c_str());
-    solution_text = new int[loaded_length];
-    for (int i = 0; i < loaded_length; i++)
-        solution_text[i] = 0;
 }
 
 void Algorithm::fill_key_text(string tmp)

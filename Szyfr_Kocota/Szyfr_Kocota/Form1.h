@@ -242,6 +242,7 @@ namespace CppCLRWinformsProjekt
 #pragma endregion
 		private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e)
 		{
+			algorithm->fill_alphabet();
 		}
 		private: System::Void numeric_up_down_threads_ValueChanged(System::Object^ sender, System::EventArgs^ e)
 		{
@@ -270,10 +271,30 @@ namespace CppCLRWinformsProjekt
 		}
 		private: System::Void button_decode_Click(System::Object^ sender, System::EventArgs^ e)
 		{
+			algorithm->set_encrypting(false);
+			algorithm->fill_key_x();
+			algorithm->fill_key_y();
+			algorithm->shuffle_alphabet();
+			int where_decode = 0;
+			for (int i = 0; i < algorithm->get_loaded_length(); i+=2)
+			{
+				if (algorithm->get_loaded_char(i) == '-')
+				{
+					algorithm->decrypt_negative(i, where_decode);
+					i++;
+				}
+				else
+					algorithm->decrypt(i, where_decode);
+				where_decode++;
+			}
+			solution_text = algorithm->convert_to_system_string_from_char(algorithm->get_solution_text_char(), algorithm->get_loaded_length()/2);
+			text_box_right->Clear();
+			text_box_right->Text = solution_text;
+
 		}
 		private: System::Void button_encode_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			algorithm->fill_alphabet();
+			algorithm->set_encrypting(true);
 			algorithm->fill_key_x();
 			algorithm->fill_key_y();
 			algorithm->shuffle_alphabet();
@@ -281,7 +302,9 @@ namespace CppCLRWinformsProjekt
 			{
 				algorithm->encrypt(i);
 			}
-
+			solution_text = algorithm->convert_to_system_string_from_int(algorithm->get_solution_text_int(), algorithm->get_loaded_length());
+			text_box_right->Clear();
+			text_box_right->Text = solution_text;
 		}
 		private: System::Void button_open_text_Click(System::Object^ sender, System::EventArgs^ e)
 		{
@@ -297,9 +320,6 @@ namespace CppCLRWinformsProjekt
 		}
 		private: System::Void button_save_text_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			solution_text = algorithm->convert_to_system_string(algorithm->get_solution_text(), algorithm->get_loaded_length());
-			text_box_right->Clear();
-			text_box_right->Text = solution_text;
 			File::WriteAllText("C:/Users/krzyc/OneDrive/Pulpit/szyforwanko/solution.txt",solution_text);
 			//algorithm->delete_everything();
 		}
