@@ -198,10 +198,11 @@ int Algorithm::find_char(char c)
     return -1 * c;
 }
 
-void Algorithm::encrypt(int index)
+void Algorithm::encrypt(Object^ my_tuple)
 {
-    char tmp = loaded_text[index];
-    solution_text_int[index] = find_char(tmp);
+    Tuple<int>^ index = (Tuple<int>^) my_tuple;
+    char tmp = loaded_text[index->Item1];
+    solution_text_int[index->Item1] = find_char(tmp);
 }
 
 void Algorithm::decrypt(int index, int where_decode)

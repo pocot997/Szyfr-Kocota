@@ -46,7 +46,7 @@ public:
 	void fill_key_y(); //funkcja usupe³nia tablice z kluczem dla osi y na podstawie klucza x
 	void shuffle_alphabet(); //funckja tworzy now¹ wymieszan¹ talbice z alfabetem
 	int find_char(char c); //funkcja wyszukuje w alfabecie wskazany znak i zwraca jego pozycjê jako 10*y+x
-	void encrypt(int index); //funkcja koduje znak o zadanym indeksie
+	void encrypt(Object^ my_tuple); //funkcja koduje znak o zadanym indeksie
 	void decrypt(int index, int where_decode); //funkcja odkodowywuje znaki o zadanym indeksie
 	void decrypt_negative(int index, int where_decode); //funkcja odkodowywuje znaki specjalne (kodowane ujemnie)
 	void delete_additional(int where_decode); //funkcja zwalnia pamiêc zaalokowan¹ z ewentualnym naddatkiem

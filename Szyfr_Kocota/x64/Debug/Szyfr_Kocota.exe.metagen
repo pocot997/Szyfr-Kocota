@@ -29,7 +29,7 @@ Class Algorithm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     fill_key_y(): PrivateScope, Public, HideBySig
     shuffle_alphabet(): PrivateScope, Public, HideBySig
     find_char(SByte IsSignUnspecifiedByte): PrivateScope, Public, HideBySig
-    encrypt(Int32): PrivateScope, Public, HideBySig
+    encrypt(Object): PrivateScope, Public, HideBySig
     decrypt(Int32, Int32): PrivateScope, Public, HideBySig
     decrypt_negative(Int32, Int32): PrivateScope, Public, HideBySig
     delete_additional(Int32): PrivateScope, Public, HideBySig

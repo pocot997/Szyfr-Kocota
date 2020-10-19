@@ -1,16 +1,18 @@
 #pragma once
-#include<iostream>
+#include <iostream>
+#include <chrono>
 #include "algorithm.h"
 
 namespace CppCLRWinformsProjekt
 {
 	using namespace System;
 	using namespace System::IO;
-	using namespace System::ComponentModel;
-	using namespace System::Collections;
-	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Threading;
+	using namespace System::Collections;
+	using namespace System::ComponentModel;
+	using namespace System::Windows::Forms;
 
 	/// <summary>
 	/// Zusammenfassung für Form1
@@ -48,7 +50,6 @@ namespace CppCLRWinformsProjekt
 		private: System::Windows::Forms::Button^ button_open_key;
 		private: System::Windows::Forms::Button^ button_save_text;
 		private: System::Windows::Forms::Button^ button_open_text;
-
 		private: System::Windows::Forms::NumericUpDown^ numeric_up_down_threads;
 		private: System::Windows::Forms::TextBox^ text_box_middle;
 		private: System::Windows::Forms::TextBox^ text_box_left;
@@ -243,10 +244,10 @@ namespace CppCLRWinformsProjekt
 		private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e)
 		{
 			algorithm->fill_alphabet();
+			threads = Int32(numeric_up_down_threads->Value);
 		}
 		private: System::Void numeric_up_down_threads_ValueChanged(System::Object^ sender, System::EventArgs^ e)
 		{
-			//Decimal tmp =;
 			threads = Int32(numeric_up_down_threads->Value);
 		}
 		private: System::Void radio_cpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
@@ -298,10 +299,45 @@ namespace CppCLRWinformsProjekt
 			algorithm->fill_key_x();
 			algorithm->fill_key_y();
 			algorithm->shuffle_alphabet();
-			for (int i = 0; i < algorithm->get_loaded_length();i++)
+			if (threads > algorithm->get_loaded_length())
+				threads = algorithm->get_loaded_length();
+			Generic::List<Thread^>^ thread_list = gcnew Generic::List<Thread^>();	//Lista do przechowywania aktualnie obs³ugiwanych w¹tków
+			auto start = std::chrono::high_resolution_clock::now();
+			int i = 0;
+			for (i; i < threads; i++)
 			{
-				algorithm->encrypt(i);
+				thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::encrypt)));
+				Tuple<int>^ my_first_tuple = gcnew Tuple<int> (i);
+				thread_list[i]->Start(my_first_tuple);
 			}
+			bool ready;
+			for (i; i < algorithm->get_loaded_length();i++)
+			{
+				ready = false;
+				while (!ready)
+				{
+					for (int j = 0; j < threads; j++)
+					{
+						if (!thread_list[j]->IsAlive)
+						{
+							thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::encrypt));
+							Tuple<int> ^ my_second_tuple = gcnew Tuple<int> (i);
+							thread_list[j]->Start(my_second_tuple);
+							ready = true;
+						}
+						if (ready)
+							break;
+					}
+				}
+			}
+			for (int i = 0; i < threads; i++)
+			{
+				thread_list[i]->Join();
+			}
+			auto stop = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+			String^ duration_s = gcnew String(to_string(duration.count()).c_str());
+			text_box_middle->Text = "Czas wykonania: " + duration_s + "ms";
 			solution_text = algorithm->convert_to_system_string_from_int(algorithm->get_solution_text_int(), algorithm->get_loaded_length());
 			text_box_right->Clear();
 			text_box_right->Text = solution_text;
