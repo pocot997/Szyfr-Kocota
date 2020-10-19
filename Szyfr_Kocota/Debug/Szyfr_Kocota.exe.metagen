@@ -14,6 +14,22 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
+Class Algorithm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    fill_loaded_text(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
+    fill_key_text(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
+    file_read(Object, EventArgs, Int32): PrivateScope, Public, HideBySig
+    fill_alphabet(): PrivateScope, Public, HideBySig
+    complete_key_xd(): PrivateScope, Public, HideBySig
+    insert_key_x(Int32): PrivateScope, Public, HideBySig
+    fill_key_x(): PrivateScope, Public, HideBySig
+    fill_key_y(): PrivateScope, Public, HideBySig
+    shuffle_alphabet(): PrivateScope, Public, HideBySig
+    find_char(SByte IsSignUnspecifiedByte): PrivateScope, Public, HideBySig
+    encrypt(Int32): PrivateScope, Public, HideBySig
+    get_loaded_length(): PrivateScope, Public, HideBySig
+    get_solution_int(Int32): PrivateScope, Public, HideBySig
 Class CppCLRWinformsProjekt.Form1: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

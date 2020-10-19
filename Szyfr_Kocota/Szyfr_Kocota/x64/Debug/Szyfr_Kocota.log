@@ -1,0 +1,7 @@
+﻿  algorithm.cpp
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(252,33): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(254,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(262,36): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(264,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  algorithm.obj : napotkano moduł MSIL; konsolidowanie przyrostowe jest wyłączone dla modułów MSIL; zostanie wykonana pełna konsolidacja
+  Szyfr_Kocota.vcxproj -> C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\x64\Debug\Szyfr_Kocota.exe

@@ -1,9 +1,11 @@
 #pragma once
+#include<iostream>
+#include "algorithm.h"
 
 namespace CppCLRWinformsProjekt
 {
-
 	using namespace System;
+	using namespace System::IO;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
@@ -15,10 +17,13 @@ namespace CppCLRWinformsProjekt
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
+		private:
+			Algorithm^ algorithm;
 		public:
 		Form1(void)
 		{
 			InitializeComponent();
+			algorithm = gcnew Algorithm();
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
 			//
@@ -43,11 +48,18 @@ namespace CppCLRWinformsProjekt
 		private: System::Windows::Forms::Button^ button_open_key;
 		private: System::Windows::Forms::Button^ button_save_text;
 		private: System::Windows::Forms::Button^ button_open_text;
-		private: System::Windows::Forms::Button^ button_set_threads;
+
 		private: System::Windows::Forms::NumericUpDown^ numeric_up_down_threads;
 		private: System::Windows::Forms::TextBox^ text_box_middle;
 		private: System::Windows::Forms::TextBox^ text_box_left;
-		/// <summary>
+			   String^ loaded_text;
+			   String^ key_text;
+			   String^ solution_text;
+			   String^ alphabet;
+			   bool asm_or_cpp; //0=asm, 1=cpp
+			   int threads;
+	private: System::Windows::Forms::Label^ label_threads;
+		   /// <summary>
 		/// Erforderliche Designervariable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
@@ -67,10 +79,10 @@ namespace CppCLRWinformsProjekt
 			this->button_open_key = (gcnew System::Windows::Forms::Button());
 			this->button_save_text = (gcnew System::Windows::Forms::Button());
 			this->button_open_text = (gcnew System::Windows::Forms::Button());
-			this->button_set_threads = (gcnew System::Windows::Forms::Button());
 			this->numeric_up_down_threads = (gcnew System::Windows::Forms::NumericUpDown());
 			this->text_box_middle = (gcnew System::Windows::Forms::TextBox());
 			this->text_box_left = (gcnew System::Windows::Forms::TextBox());
+			this->label_threads = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numeric_up_down_threads))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -84,7 +96,7 @@ namespace CppCLRWinformsProjekt
 			this->radio_cpp->TabStop = true;
 			this->radio_cpp->Text = L"C++";
 			this->radio_cpp->UseVisualStyleBackColor = true;
-			this->radio_cpp->CheckedChanged += gcnew System::EventHandler(this, &Form1::radioButton1_CheckedChanged);
+			this->radio_cpp->CheckedChanged += gcnew System::EventHandler(this, &Form1::radio_cpp_CheckedChanged);
 			// 
 			// radio_asm
 			// 
@@ -158,19 +170,9 @@ namespace CppCLRWinformsProjekt
 			this->button_open_text->UseVisualStyleBackColor = true;
 			this->button_open_text->Click += gcnew System::EventHandler(this, &Form1::button_open_text_Click);
 			// 
-			// button_set_threads
-			// 
-			this->button_set_threads->Location = System::Drawing::Point(425, 10);
-			this->button_set_threads->Name = L"button_set_threads";
-			this->button_set_threads->Size = System::Drawing::Size(75, 20);
-			this->button_set_threads->TabIndex = 29;
-			this->button_set_threads->Text = L"Set threads";
-			this->button_set_threads->UseVisualStyleBackColor = true;
-			this->button_set_threads->Click += gcnew System::EventHandler(this, &Form1::button_set_threads_Click);
-			// 
 			// numeric_up_down_threads
 			// 
-			this->numeric_up_down_threads->Location = System::Drawing::Point(375, 10);
+			this->numeric_up_down_threads->Location = System::Drawing::Point(440, 10);
 			this->numeric_up_down_threads->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1024, 0, 0, 0 });
 			this->numeric_up_down_threads->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
 			this->numeric_up_down_threads->Name = L"numeric_up_down_threads";
@@ -182,9 +184,9 @@ namespace CppCLRWinformsProjekt
 			// text_box_middle
 			// 
 			this->text_box_middle->Location = System::Drawing::Point(374, 36);
+			this->text_box_middle->MaxLength = 42000;
 			this->text_box_middle->Multiline = true;
 			this->text_box_middle->Name = L"text_box_middle";
-			this->text_box_middle->ScrollBars = System::Windows::Forms::ScrollBars::Both;
 			this->text_box_middle->Size = System::Drawing::Size(126, 41);
 			this->text_box_middle->TabIndex = 30;
 			this->text_box_middle->TextChanged += gcnew System::EventHandler(this, &Form1::text_box_middle_TextChanged);
@@ -192,6 +194,7 @@ namespace CppCLRWinformsProjekt
 			// text_box_left
 			// 
 			this->text_box_left->Location = System::Drawing::Point(12, 12);
+			this->text_box_left->MaxLength = 42000;
 			this->text_box_left->Multiline = true;
 			this->text_box_left->Name = L"text_box_left";
 			this->text_box_left->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
@@ -199,14 +202,24 @@ namespace CppCLRWinformsProjekt
 			this->text_box_left->TabIndex = 31;
 			this->text_box_left->TextChanged += gcnew System::EventHandler(this, &Form1::text_box_left_TextChanged);
 			// 
+			// label_threads
+			// 
+			this->label_threads->AutoSize = true;
+			this->label_threads->Location = System::Drawing::Point(385, 15);
+			this->label_threads->Name = L"label_threads";
+			this->label_threads->Size = System::Drawing::Size(49, 13);
+			this->label_threads->TabIndex = 32;
+			this->label_threads->Text = L"Threads:";
+			this->label_threads->Click += gcnew System::EventHandler(this, &Form1::label_threads_Click);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(873, 601);
+			this->Controls->Add(this->label_threads);
 			this->Controls->Add(this->text_box_left);
 			this->Controls->Add(this->text_box_middle);
-			this->Controls->Add(this->button_set_threads);
 			this->Controls->Add(this->numeric_up_down_threads);
 			this->Controls->Add(this->text_box_right);
 			this->Controls->Add(this->button_open_key);
@@ -232,12 +245,16 @@ namespace CppCLRWinformsProjekt
 		}
 		private: System::Void numeric_up_down_threads_ValueChanged(System::Object^ sender, System::EventArgs^ e)
 		{
+			//Decimal tmp =;
+			threads = Int32(numeric_up_down_threads->Value);
 		}
-		private: System::Void radioButton1_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
+		private: System::Void radio_cpp_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
 		{
+			asm_or_cpp = true;
 		}
 		private: System::Void radio_asm_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
 		{
+			asm_or_cpp = false;
 		}
 		private: System::Void text_box_left_TextChanged(System::Object^ sender, System::EventArgs^ e)
 		{
@@ -256,15 +273,38 @@ namespace CppCLRWinformsProjekt
 		}
 		private: System::Void button_encode_Click(System::Object^ sender, System::EventArgs^ e)
 		{
+			algorithm->fill_alphabet();
+			algorithm->fill_key_x();
+			algorithm->fill_key_y();
+			algorithm->shuffle_alphabet();
+			for (int i = 0; i < algorithm->get_loaded_length();i++)
+			{
+				algorithm->encrypt(i);
+			}
+
 		}
 		private: System::Void button_open_text_Click(System::Object^ sender, System::EventArgs^ e)
 		{
+			loaded_text = algorithm->file_read(sender, e, 0);
+			text_box_left->Clear(); //wyczyszczenie tex boxa
+			text_box_left->Text = loaded_text; //wpisanie do text boxa
 		}
 		private: System::Void button_open_key_Click(System::Object^ sender, System::EventArgs^ e)
 		{
+			key_text = algorithm->file_read(sender, e, 1);
+			text_box_middle->Clear(); //wyczyszczenie tex boxa
+			text_box_middle->Text = key_text; //wpisanie do text boxa
 		}
 		private: System::Void button_save_text_Click(System::Object^ sender, System::EventArgs^ e)
 		{
+			solution_text = algorithm->convert_to_system_string(algorithm->get_solution_text(), algorithm->get_loaded_length());
+			text_box_right->Clear();
+			text_box_right->Text = solution_text;
+			File::WriteAllText("C:/Users/krzyc/OneDrive/Pulpit/szyforwanko/solution.txt",solution_text);
+			//algorithm->delete_everything();
 		}
-	};
+		private: System::Void label_threads_Click(System::Object^ sender, System::EventArgs^ e)
+		{
+		}
+};
 }

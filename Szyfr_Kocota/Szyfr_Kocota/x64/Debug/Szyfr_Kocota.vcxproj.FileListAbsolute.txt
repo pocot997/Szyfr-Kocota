@@ -1,0 +1,3 @@
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\x64\Debug\Szyfr_Kocota.Form1.resources
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\x64\Debug\Szyfr_Kocota.vcxproj.GenerateResource.cache
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\x64\Debug\Szyfr_Kocota.vcxprojAssemblyReference.cache
