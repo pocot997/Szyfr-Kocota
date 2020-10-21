@@ -276,18 +276,69 @@ namespace CppCLRWinformsProjekt
 			algorithm->fill_key_x();
 			algorithm->fill_key_y();
 			algorithm->shuffle_alphabet();
+			if (threads > algorithm->get_loaded_length())
+				threads = algorithm->get_loaded_length();
+			Generic::List<Thread^>^ thread_list = gcnew Generic::List<Thread^>();	//Lista do przechowywania aktualnie obs³ugiwanych w¹tków
+			bool ready;
+			int which_letter = 0;
 			int where_decode = 0;
-			for (int i = 0; i < algorithm->get_loaded_length(); i+=2)
+			auto start = std::chrono::high_resolution_clock::now();
+			for (int i =0; i < threads; i++)
 			{
-				if (algorithm->get_loaded_char(i) == '-')
+				if (algorithm->get_loaded_char(which_letter) == '-')
 				{
-					algorithm->decrypt_negative(i, where_decode);
-					i++;
+					thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt_negative)));
+					Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+					thread_list[i]->Start(my_first_tuple);
+					which_letter += 3;
 				}
 				else
-					algorithm->decrypt(i, where_decode);
+				{
+					thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt)));
+					Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+					thread_list[i]->Start(my_first_tuple);
+					which_letter += 2;
+				}
 				where_decode++;
 			}
+			for (which_letter; which_letter < algorithm->get_loaded_length(); which_letter+=2)
+			{
+				ready = false;
+				while (!ready)
+				{
+					for (int j = 0; j < threads; j++)
+					{
+						if (!thread_list[j]->IsAlive)
+						{
+							if (algorithm->get_loaded_char(which_letter) == '-')
+							{
+								which_letter++;
+								thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt_negative));
+								Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+								thread_list[j]->Start(my_first_tuple);
+							}
+							else
+							{
+								thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt));
+								Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+								thread_list[j]->Start(my_first_tuple);
+							}
+							where_decode++;
+							ready = true;
+						}
+						if (ready)
+							break;
+					}
+				}
+			}
+			for (int i = 0; i < threads; i++)
+			{
+				thread_list[i]->Join();
+			}
+			auto stop = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+			String^ duration_s = gcnew String(to_string(duration.count()).c_str());
+			text_box_middle->Text = "Czas wykonania: " + duration_s + "ms";
 			solution_text = algorithm->convert_to_system_string_from_char(algorithm->get_solution_text_char(), algorithm->get_loaded_length()/2);
 			text_box_right->Clear();
 			text_box_right->Text = solution_text;
@@ -302,15 +353,15 @@ namespace CppCLRWinformsProjekt
 			if (threads > algorithm->get_loaded_length())
 				threads = algorithm->get_loaded_length();
 			Generic::List<Thread^>^ thread_list = gcnew Generic::List<Thread^>();	//Lista do przechowywania aktualnie obs³ugiwanych w¹tków
-			auto start = std::chrono::high_resolution_clock::now();
 			int i = 0;
+			bool ready;
+			auto start = std::chrono::high_resolution_clock::now();
 			for (i; i < threads; i++)
 			{
 				thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::encrypt)));
 				Tuple<int>^ my_first_tuple = gcnew Tuple<int> (i);
 				thread_list[i]->Start(my_first_tuple);
 			}
-			bool ready;
 			for (i; i < algorithm->get_loaded_length();i++)
 			{
 				ready = false;

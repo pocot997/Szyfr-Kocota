@@ -205,18 +205,21 @@ void Algorithm::encrypt(Object^ my_tuple)
     solution_text_int[index->Item1] = find_char(tmp);
 }
 
-void Algorithm::decrypt(int index, int where_decode)
+void Algorithm::decrypt(Object^ my_tuple)
 {
-    int y = (loaded_text[index]-'0');
-    int x = (loaded_text[index+1]-'0');
-    solution_text_char[where_decode] = shuffled_alphabet[y-1][x-1];
+    Tuple<int, int>^ index = (Tuple<int, int>^) my_tuple;
+    int y = (loaded_text[index->Item1] - '0');
+    int x = (loaded_text[index->Item1 + 1] - '0');
+    solution_text_char[index->Item2] = shuffled_alphabet[y-1][x-1];
 }
 
-void Algorithm::decrypt_negative(int index, int where_decode)
+void Algorithm::decrypt_negative(Object^ my_tuple)
 {
-    int y = (loaded_text[index + 1] - '0');
-    int x = (loaded_text[index + 2] - '0');
-    solution_text_char[where_decode] = (y * 10) + x;
+    Tuple<int, int>^ index = (Tuple<int, int>^) my_tuple;
+    int y = (loaded_text[index->Item1] - '0');
+    int x = (loaded_text[index->Item1 + 1] - '0');
+    char xd = (y * 10) + x;
+    solution_text_char[index->Item2] = (y * 10) + x;
 }
 
 void Algorithm::delete_additional(int where_decode)

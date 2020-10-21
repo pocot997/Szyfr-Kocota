@@ -47,8 +47,8 @@ public:
 	void shuffle_alphabet(); //funckja tworzy now¹ wymieszan¹ talbice z alfabetem
 	int find_char(char c); //funkcja wyszukuje w alfabecie wskazany znak i zwraca jego pozycjê jako 10*y+x
 	void encrypt(Object^ my_tuple); //funkcja koduje znak o zadanym indeksie
-	void decrypt(int index, int where_decode); //funkcja odkodowywuje znaki o zadanym indeksie
-	void decrypt_negative(int index, int where_decode); //funkcja odkodowywuje znaki specjalne (kodowane ujemnie)
+	void decrypt(Object^ my_tuple); //funkcja odkodowywuje znaki o zadanym indeksie
+	void decrypt_negative(Object^ my_tuple); //funkcja odkodowywuje znaki specjalne (kodowane ujemnie)
 	void delete_additional(int where_decode); //funkcja zwalnia pamiêc zaalokowan¹ z ewentualnym naddatkiem
 	int get_loaded_length(); //funkcja zwraca loaded_length
 	int get_solution_int(int i); //funkcja zwraca int z solution_text_int o wskazanym indeksie
