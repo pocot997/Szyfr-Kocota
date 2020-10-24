@@ -1,0 +1,47 @@
+  Szyfr_Kocota.Form1.resources - Embedded, ContainedInManifestFile, 
+ImageRuntimeVersion: v4.0.30319
+Assembly Szyfr_Kocota, Version=1.0.*, Culture=Język niezmienny (kraj niezmienny): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class Algorithm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    fill_loaded_text(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
+    fill_key_text(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
+    file_read(Object, EventArgs, Int32): PrivateScope, Public, HideBySig
+    convert_to_system_string_from_int(Int32*, Int32): PrivateScope, Public, HideBySig
+    convert_to_system_string_from_char(SByte*, Int32): PrivateScope, Public, HideBySig
+    fill_alphabet(): PrivateScope, Public, HideBySig
+    complete_key_xd(): PrivateScope, Public, HideBySig
+    insert_key_x(Int32): PrivateScope, Public, HideBySig
+    fill_key_x(): PrivateScope, Public, HideBySig
+    fill_key_y(): PrivateScope, Public, HideBySig
+    shuffle_alphabet(): PrivateScope, Public, HideBySig
+    find_char(SByte IsSignUnspecifiedByte): PrivateScope, Public, HideBySig
+    encrypt(Object): PrivateScope, Public, HideBySig
+    decrypt(Object): PrivateScope, Public, HideBySig
+    decrypt_negative(Object): PrivateScope, Public, HideBySig
+    delete_additional(Int32): PrivateScope, Public, HideBySig
+    get_loaded_length(): PrivateScope, Public, HideBySig
+    get_solution_int(Int32): PrivateScope, Public, HideBySig
+    get_solution_text_int(): PrivateScope, Public, HideBySig
+    get_solution_text_char(): PrivateScope, Public, HideBySig
+    get_loaded_char(Int32): PrivateScope, Public, HideBySig
+    get_key_int(Int32): PrivateScope, Public, HideBySig
+    delete_everything(): PrivateScope, Public, HideBySig
+    set_encrypting(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
+    get_encrypting(): PrivateScope, Public, HideBySig
+Class CppCLRWinformsProjekt.Form1: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

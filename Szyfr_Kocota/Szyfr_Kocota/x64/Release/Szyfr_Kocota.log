@@ -1,0 +1,9 @@
+﻿  Assembling assembly.asm...
+  CppCLR_WinformsProjekt.cpp
+  algorithm.cpp
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(308,33): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(310,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(315,36): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\Szyfr_Kocota\algorithm.cpp(317,5): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Generowanie kodu...
+  Szyfr_Kocota.vcxproj -> C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\x64\Release\Szyfr_Kocota.exe

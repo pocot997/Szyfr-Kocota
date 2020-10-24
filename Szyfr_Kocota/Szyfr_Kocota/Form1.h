@@ -276,6 +276,8 @@ namespace CppCLRWinformsProjekt
 			algorithm->fill_key_x();
 			algorithm->fill_key_y();
 			algorithm->shuffle_alphabet();
+			if (!asm_or_cpp)
+				algorithm->tablicuj();
 			if (threads > algorithm->get_loaded_length())
 				threads = algorithm->get_loaded_length();
 			Generic::List<Thread^>^ thread_list = gcnew Generic::List<Thread^>();	//Lista do przechowywania aktualnie obs³ugiwanych w¹tków
@@ -288,14 +290,14 @@ namespace CppCLRWinformsProjekt
 				if (algorithm->get_loaded_char(which_letter) == '-')
 				{
 					thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt_negative)));
-					Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+					Tuple<int, int, bool>^ my_first_tuple = gcnew Tuple<int, int, bool>(which_letter, where_decode, asm_or_cpp);
 					thread_list[i]->Start(my_first_tuple);
-					which_letter += 3;
+					which_letter += 4;
 				}
 				else
 				{
 					thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt)));
-					Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+					Tuple<int, int, bool>^ my_first_tuple = gcnew Tuple<int, int, bool>(which_letter, where_decode, asm_or_cpp);
 					thread_list[i]->Start(my_first_tuple);
 					which_letter += 2;
 				}
@@ -312,15 +314,15 @@ namespace CppCLRWinformsProjekt
 						{
 							if (algorithm->get_loaded_char(which_letter) == '-')
 							{
-								which_letter++;
 								thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt_negative));
-								Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+								Tuple<int, int, bool>^ my_first_tuple = gcnew Tuple<int, int, bool>(which_letter, where_decode, asm_or_cpp);
 								thread_list[j]->Start(my_first_tuple);
+								which_letter+=2;
 							}
 							else
 							{
 								thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::decrypt));
-								Tuple<int, int>^ my_first_tuple = gcnew Tuple<int, int>(which_letter, where_decode);
+								Tuple<int, int, bool>^ my_first_tuple = gcnew Tuple<int, int, bool>(which_letter, where_decode, asm_or_cpp);
 								thread_list[j]->Start(my_first_tuple);
 							}
 							where_decode++;
@@ -339,6 +341,7 @@ namespace CppCLRWinformsProjekt
 			auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 			String^ duration_s = gcnew String(to_string(duration.count()).c_str());
 			text_box_middle->Text = "Czas wykonania: " + duration_s + "ms";
+			algorithm->delete_additional(where_decode);
 			solution_text = algorithm->convert_to_system_string_from_char(algorithm->get_solution_text_char(), algorithm->get_loaded_length()/2);
 			text_box_right->Clear();
 			text_box_right->Text = solution_text;
@@ -350,6 +353,8 @@ namespace CppCLRWinformsProjekt
 			algorithm->fill_key_x();
 			algorithm->fill_key_y();
 			algorithm->shuffle_alphabet();
+			if(!asm_or_cpp)
+				algorithm->tablicuj();
 			if (threads > algorithm->get_loaded_length())
 				threads = algorithm->get_loaded_length();
 			Generic::List<Thread^>^ thread_list = gcnew Generic::List<Thread^>();	//Lista do przechowywania aktualnie obs³ugiwanych w¹tków
@@ -359,7 +364,7 @@ namespace CppCLRWinformsProjekt
 			for (i; i < threads; i++)
 			{
 				thread_list->Add(gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::encrypt)));
-				Tuple<int>^ my_first_tuple = gcnew Tuple<int> (i);
+				Tuple<int, bool>^ my_first_tuple = gcnew Tuple<int, bool> (i, asm_or_cpp);
 				thread_list[i]->Start(my_first_tuple);
 			}
 			for (i; i < algorithm->get_loaded_length();i++)
@@ -372,7 +377,7 @@ namespace CppCLRWinformsProjekt
 						if (!thread_list[j]->IsAlive)
 						{
 							thread_list[j] = gcnew Thread(gcnew ParameterizedThreadStart(algorithm, &Algorithm::encrypt));
-							Tuple<int> ^ my_second_tuple = gcnew Tuple<int> (i);
+							Tuple<int, bool> ^ my_second_tuple = gcnew Tuple<int, bool> (i, asm_or_cpp);
 							thread_list[j]->Start(my_second_tuple);
 							ready = true;
 						}

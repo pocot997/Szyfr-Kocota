@@ -51,7 +51,7 @@ String^ Algorithm::convert_to_system_string_from_int(int* tab, int tab_length)
     return full;
 }
 
-String^ Algorithm::convert_to_system_string_from_char(char* tab, int tab_length)
+String^ Algorithm::convert_to_system_string_from_char(unsigned char* tab, int tab_length)
 {
     string tmp = "";
     for (int i = 0; i < tab_length; i++)
@@ -180,10 +180,10 @@ void Algorithm::shuffle_alphabet()
     if (encrypting)
         solution_text_int = new int[loaded_length];
     else
-        solution_text_char = new char[loaded_length / 2];
+        solution_text_char = new unsigned char[loaded_length / 2];
 }
 
-int Algorithm::find_char(char c)
+int Algorithm::cpp_encrypt(unsigned char c)
 {
     for (int i = 0; i < 7; i++)
     {
@@ -195,31 +195,52 @@ int Algorithm::find_char(char c)
             }
         }
     }
-    return -1 * c;
+    if (c < 100)
+        return -300 + (-1 * c);
+    else
+        return -1 * c;
 }
 
 void Algorithm::encrypt(Object^ my_tuple)
 {
-    Tuple<int>^ index = (Tuple<int>^) my_tuple;
-    char tmp = loaded_text[index->Item1];
-    solution_text_int[index->Item1] = find_char(tmp);
+    Tuple<int, bool>^ index = (Tuple<int, bool>^) my_tuple;
+    if (index->Item2)
+    {
+        solution_text_int[index->Item1] = cpp_encrypt(loaded_text[index->Item1]);
+    }
+    else
+        solution_text_int[index->Item1] = asm_encrypt(loaded_text, shuffled_alphabet_tab, index->Item1);
 }
 
 void Algorithm::decrypt(Object^ my_tuple)
 {
-    Tuple<int, int>^ index = (Tuple<int, int>^) my_tuple;
-    int y = (loaded_text[index->Item1] - '0');
-    int x = (loaded_text[index->Item1 + 1] - '0');
-    solution_text_char[index->Item2] = shuffled_alphabet[y-1][x-1];
+    Tuple<int, int, bool>^ index = (Tuple<int, int, bool>^) my_tuple;
+    if (index->Item3)
+    {
+        int y = (loaded_text[index->Item1] - '0');
+        int x = (loaded_text[index->Item1 + 1] - '0');
+        solution_text_char[index->Item2] = shuffled_alphabet[y - 1][x - 1];
+    }
+    else
+        solution_text_char[index->Item2] = asm_decrypt(loaded_text, shuffled_alphabet_tab, index->Item1);
 }
 
 void Algorithm::decrypt_negative(Object^ my_tuple)
 {
-    Tuple<int, int>^ index = (Tuple<int, int>^) my_tuple;
-    int y = (loaded_text[index->Item1] - '0');
-    int x = (loaded_text[index->Item1 + 1] - '0');
-    char xd = (y * 10) + x;
-    solution_text_char[index->Item2] = (y * 10) + x;
+    Tuple<int, int, bool>^ index = (Tuple<int, int, bool>^) my_tuple;
+    if (index->Item3)
+    {
+        int s1 = (loaded_text[index->Item1 + 1] - '0');
+        int s2 = (loaded_text[index->Item1 + 2] - '0');
+        int s3 = (loaded_text[index->Item1 + 3] - '0');
+        if (s1 > 2)
+            s1 -= 3;
+        solution_text_char[index->Item2] = (s1 * 100) + (s2 * 10) + s3;
+    }
+    else
+    {
+        solution_text_char[index->Item2] = asm_decrypt_negative(loaded_text, index->Item1);
+    }
 }
 
 void Algorithm::delete_additional(int where_decode)
@@ -244,7 +265,7 @@ int* Algorithm::get_solution_text_int()
     return solution_text_int;
 }
 
-char* Algorithm::get_solution_text_char()
+unsigned char* Algorithm::get_solution_text_char()
 {
     return solution_text_char;
 }
@@ -285,6 +306,20 @@ bool Algorithm::get_encrypting()
 	return encrypting;
 }
 
+void Algorithm::tablicuj()
+{
+    int index = 0;
+    shuffled_alphabet_tab = new char[7 * 9];
+    for (int i = 0; i < 7; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            shuffled_alphabet_tab[index] = shuffled_alphabet[i][j];
+            index++;
+        }
+    }
+}
+
 Algorithm::Algorithm()
 {
     alphabet = new char* [9];
@@ -294,6 +329,7 @@ Algorithm::Algorithm()
         alphabet[i] = new char[7];
         shuffled_alphabet[i] = new char[7];
     }
+    shuffled_alphabet_tab = nullptr;
     key_x = new int[9];
     key_y = new int[7];
     loaded_text = nullptr;
@@ -305,13 +341,13 @@ Algorithm::Algorithm()
 void Algorithm::fill_loaded_text(string tmp)
 {
     loaded_length = tmp.length();
-    loaded_text = new char[loaded_length+1];
-    strcpy(loaded_text, tmp.c_str());
+    loaded_text = new unsigned char[loaded_length+1];
+    memcpy(loaded_text, tmp.c_str(), loaded_length);
 }
 
 void Algorithm::fill_key_text(string tmp)
 {
     this->key_length = tmp.length();
     key_text = new char[key_length + 1];
-    strcpy(key_text, tmp.c_str());
+    memcpy(key_text, tmp.c_str(), key_length);
 }

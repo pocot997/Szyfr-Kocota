@@ -21,14 +21,14 @@ Class Algorithm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     fill_key_text(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
     file_read(Object, EventArgs, Int32): PrivateScope, Public, HideBySig
     convert_to_system_string_from_int(Int32*, Int32): PrivateScope, Public, HideBySig
-    convert_to_system_string_from_char(SByte*, Int32): PrivateScope, Public, HideBySig
+    convert_to_system_string_from_char(Byte*, Int32): PrivateScope, Public, HideBySig
     fill_alphabet(): PrivateScope, Public, HideBySig
     complete_key_xd(): PrivateScope, Public, HideBySig
     insert_key_x(Int32): PrivateScope, Public, HideBySig
     fill_key_x(): PrivateScope, Public, HideBySig
     fill_key_y(): PrivateScope, Public, HideBySig
     shuffle_alphabet(): PrivateScope, Public, HideBySig
-    find_char(SByte IsSignUnspecifiedByte): PrivateScope, Public, HideBySig
+    cpp_encrypt(Byte): PrivateScope, Public, HideBySig
     encrypt(Object): PrivateScope, Public, HideBySig
     decrypt(Object): PrivateScope, Public, HideBySig
     decrypt_negative(Object): PrivateScope, Public, HideBySig
@@ -42,6 +42,7 @@ Class Algorithm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     delete_everything(): PrivateScope, Public, HideBySig
     set_encrypting(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     get_encrypting(): PrivateScope, Public, HideBySig
+    tablicuj(): PrivateScope, Public, HideBySig
 Class CppCLRWinformsProjekt.Form1: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

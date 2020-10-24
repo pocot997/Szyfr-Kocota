@@ -1,3 +1,3 @@
-﻿  CppCLR_WinformsProjekt.cpp
+﻿  Assembling assembly.asm...
   algorithm.obj : napotkano moduł MSIL; konsolidowanie przyrostowe jest wyłączone dla modułów MSIL; zostanie wykonana pełna konsolidacja
   Szyfr_Kocota.vcxproj -> C:\Users\krzyc\source\repos\Szyfr-Kocota\Szyfr_Kocota\x64\Debug\Szyfr_Kocota.exe
