@@ -3,6 +3,7 @@
 #include <direct.h>
 
 extern "C" int asm_encrypt(unsigned char* loaded_text, char* shuffled_alphabet, int index);
+extern "C" int asm_encrypt_mmx(unsigned char* loaded_text, char* shuffled_alphabet, int index);
 extern "C" int asm_decrypt(unsigned char* loaded_text, char* shuffled_alphabet, int index);
 extern "C" int asm_decrypt_negative(unsigned char* loaded_text, int index);
 

@@ -60,6 +60,7 @@ namespace CppCLRWinformsProjekt
 			   bool asm_or_cpp; //0=asm, 1=cpp
 			   int threads;
 	private: System::Windows::Forms::Label^ label_threads;
+	private: System::Windows::Forms::Button^ button1;
 		   /// <summary>
 		/// Erforderliche Designervariable.
 		/// </summary>
@@ -84,6 +85,7 @@ namespace CppCLRWinformsProjekt
 			this->text_box_middle = (gcnew System::Windows::Forms::TextBox());
 			this->text_box_left = (gcnew System::Windows::Forms::TextBox());
 			this->label_threads = (gcnew System::Windows::Forms::Label());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numeric_up_down_threads))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -213,11 +215,23 @@ namespace CppCLRWinformsProjekt
 			this->label_threads->Text = L"Threads:";
 			this->label_threads->Click += gcnew System::EventHandler(this, &Form1::label_threads_Click);
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(461, 408);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(162, 25);
+			this->button1->TabIndex = 33;
+			this->button1->Text = L"dupa";
+			this->button1->TextImageRelation = System::Windows::Forms::TextImageRelation::ImageAboveText;
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(873, 601);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label_threads);
 			this->Controls->Add(this->text_box_left);
 			this->Controls->Add(this->text_box_middle);
@@ -244,6 +258,10 @@ namespace CppCLRWinformsProjekt
 		private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e)
 		{
 			algorithm->fill_alphabet();
+			loaded_text = "";
+			key_text = "";
+			solution_text = "";
+			asm_or_cpp = true;
 			threads = Int32(numeric_up_down_threads->Value);
 		}
 		private: System::Void numeric_up_down_threads_ValueChanged(System::Object^ sender, System::EventArgs^ e)
@@ -418,5 +436,7 @@ namespace CppCLRWinformsProjekt
 		private: System::Void label_threads_Click(System::Object^ sender, System::EventArgs^ e)
 		{
 		}
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }

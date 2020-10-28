@@ -209,7 +209,7 @@ void Algorithm::encrypt(Object^ my_tuple)
         solution_text_int[index->Item1] = cpp_encrypt(loaded_text[index->Item1]);
     }
     else
-        solution_text_int[index->Item1] = asm_encrypt(loaded_text, shuffled_alphabet_tab, index->Item1);
+        solution_text_int[index->Item1] = asm_encrypt_mmx(loaded_text, shuffled_alphabet_tab, index->Item1);
 }
 
 void Algorithm::decrypt(Object^ my_tuple)
@@ -309,7 +309,7 @@ bool Algorithm::get_encrypting()
 void Algorithm::tablicuj()
 {
     int index = 0;
-    shuffled_alphabet_tab = new char[7 * 9];
+    shuffled_alphabet_tab = new char[(7 * 9) + 1];
     for (int i = 0; i < 7; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -318,6 +318,7 @@ void Algorithm::tablicuj()
             index++;
         }
     }
+    shuffled_alphabet_tab[63] = shuffled_alphabet_tab[0];
 }
 
 Algorithm::Algorithm()
